@@ -5,3 +5,4 @@ __pycache__/
 data/raw/
 venv/
 .venv/
+RAG_SurgeAI_Notes.md
