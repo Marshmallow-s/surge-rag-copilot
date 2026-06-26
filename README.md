@@ -28,12 +28,3 @@ methodology) that general models get wrong and can't cite.
 - [ ] **Step 5–6 — Tests / CI / deploy** — demo link + monitoring
 
 ## Setup
-
-(↓ 这段你照着真实情况填——下面是模板)
-
-```bash
-git clone https://github.com/Marshmallow-s/surge-rag-copilot.git
-cd surge-rag-copilot
-pip install -r requirements.txt    # (注意：你可能还没建 requirements.txt — 见下方提醒)
-cp .env.example .env               # then add your OPENAI_API_KEY
-```
