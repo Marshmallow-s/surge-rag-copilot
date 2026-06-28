@@ -35,3 +35,4 @@ API_DOCS_FILE = API_DIR / "api_docs.md"
 # ------------------------------------------------------------
 # One JSONL file holding every chunk (blog + api combined), one chunk per line.
 CHUNKS_FILE = DATA_DIR / "chunks.jsonl"
+INDEX_FILE = DATA_DIR / "index.jsonl"

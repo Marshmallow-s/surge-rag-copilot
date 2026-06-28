@@ -1,7 +1,7 @@
 # The RAG orchestrator: retrieve relevant chunks, then ask the LLM to answer
 # using ONLY those chunks. This is where R (retrieval) and G (generation) meet.
 
-from retrieval.search import load_chunks, rank   # R: load the index + rank top-k chunks
+from retrieval.vector_search import load_chunks, rank   # R: load the index + rank top-k chunks
 from app.llm import ask                          # G: send a prompt, get back a structured Answer
 
 
