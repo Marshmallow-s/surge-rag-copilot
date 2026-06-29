@@ -60,8 +60,9 @@ def rank(query, chunks, k=3):
 
 if __name__ == "__main__":
     chunks = load_chunks()
-    results = rank("how is model feedback collected from people", chunks)
+    results = rank("Why do the rules for tagging data stop working over time?", chunks)
     for r in results: 
         print(r["source"])
-        print(r["text"][:120])
+        print(r["text"])
+        #print(r["text"][:120])
         print("---")

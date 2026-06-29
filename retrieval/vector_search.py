@@ -67,8 +67,9 @@ def rank(query, chunks, k=3):
 # Run a quick retrieval test only when executed directly, not when imported.
 if __name__ == "__main__":
     chunks = load_chunks()
-    results = rank("How does Anthropic use RLHF", chunks)
+    results = rank("Why do the rules for tagging data stop working over time?", chunks)
     for r in results:
         print(r["source"])
-        print(r["text"][:120])
+        print(r["text"])
+        #print(r["text"][:120])
         print("---")

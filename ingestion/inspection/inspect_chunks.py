@@ -1,27 +1,48 @@
-import json
-from collections import Counter
-from config import CHUNKS_FILE   # the chunker's combined output (blog + api)
+# ingestion/inspection/survey_sources.py
+# One-off corpus survey: for each source, print a few sample chunks
+# so I can hand-judge what each source is about (golden-set prep, not pipeline).
 
-# Load every chunk back from the JSONL file, one JSON object per line
-with open(CHUNKS_FILE, "r", encoding="utf-8") as f:
-    chunks = [json.loads(line) for line in f]
+import json                                          # read jsonl
+from collections import defaultdict                  # group chunks by source
 
-print(f"Total chunks: {len(chunks)}\n")
+from config import CHUNKS_FILE                       # centralized path
 
-# Look at the first few chunks to spot-check chunk quality: does a chunk start
-# mid-word/mid-sentence (a bad blind cut) or on a clean boundary?
-for i in range(3):
-    c = chunks[i]
-    print(f"===== CHUNK {i}  (source: {c['source']}, len: {len(c['text'])}) =====")
-    print(repr(c["text"][:80]))   # show the start: clean opening, or half a word?
-    print("...")
-    print(repr(c["text"][-80:]))  # show the end: clean close, or cut off mid-sentence?
-    print()
 
-# Count chunks per source file — confirms every file made it in, and shows the
-# blog/api split at a glance (catches a missing folder or wrong path)
-counts = Counter(c["source"] for c in chunks)
-print("Chunks per source:")
-for source, n in sorted(counts.items()):
-    print(f"  {n:3}  {source}")
-print(f"\nDistinct source files: {len(counts)}")
+# --- 1. Load ---
+# Reuse the same load pattern as the retriever: each line is one json chunk.
+def load_chunks():
+    chunks = []
+    with open(CHUNKS_FILE, encoding="utf-8") as f:
+        for line in f:
+            chunks.append(json.loads(line))
+    return chunks
+
+
+# --- 2. Group by source ---
+# Collect all chunks belonging to each source filename into one bucket.
+def group_by_source(chunks):
+    grouped = defaultdict(list)
+    for chunk in chunks:
+        grouped[chunk["source"]].append(chunk)
+    return grouped
+
+
+# --- 3. Sample + print ---
+# For each source, show how many chunks it has and print the first N,
+# truncated, so the terminal stays readable. I read these and write
+# one sentence per source describing what it covers.
+def survey(grouped, samples_per_source=2, preview_chars=300):
+    for source, chunks in grouped.items():
+        print("=" * 80)
+        print(f"SOURCE: {source}  ({len(chunks)} chunks)")
+        print("=" * 80)
+        for chunk in chunks[:samples_per_source]:
+            print(chunk["text"][:preview_chars].strip())
+            print("-" * 40)
+        print()
+
+
+if __name__ == "__main__":
+    chunks = load_chunks()
+    grouped = group_by_source(chunks)
+    survey(grouped)
